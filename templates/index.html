@@ -1,0 +1,311 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#fff0f6">
+    <meta name="description" content="Aplicación de derivación numérica con diferentes métodos de cálculo.">
+
+    <title>Derivación Numérica</title>
+
+    <!-- Hoja de estilos -->
+    <link rel="stylesheet" href="../static/style.css">
+
+    <!-- Librería para las gráficas -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+    <main class="container">
+
+        <!-- ENCABEZADO -->
+        <header class="header">
+
+            <span class="decoracion" aria-hidden="true">✿</span>
+
+            <p class="subtitulo">MATEMÁTICAS · CÁLCULO</p>
+
+            <h1>Derivación Numérica</h1>
+
+            <p class="descripcion">
+                Descubre el valor aproximado de una derivada
+            </p>
+
+        </header>
+
+
+        <!-- FORMULARIO DE ENTRADA -->
+        <section class="card" aria-labelledby="tituloEntrada">
+
+            <h2 id="tituloEntrada">♡ Datos de entrada</h2>
+
+            <p class="ayuda">
+                Completa los siguientes campos para comenzar.
+            </p>
+
+            <form id="formulario" autocomplete="off">
+
+                <!-- FUNCIÓN -->
+                <div class="campo">
+
+                    <label for="funcion">Función matemática</label>
+
+                    <input
+                        type="text"
+                        id="funcion"
+                        placeholder="Ej. x**2 + 3*x + 2"
+                        aria-describedby="ayudaFuncion"
+                        required
+                    >
+
+                    <small id="ayudaFuncion">
+                        Usa x como variable. Puedes escribir ^ o ** para potencias.
+                    </small>
+
+                </div>
+
+
+                <!-- VALORES X Y H -->
+                <div class="fila">
+
+                    <div class="campo">
+
+                        <label for="valorX">Valor de X</label>
+
+                        <input
+                            type="number"
+                            id="valorX"
+                            step="any"
+                            placeholder="Ej. 2"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="campo">
+
+                        <label for="valorH">Valor de H</label>
+
+                        <input
+                            type="number"
+                            id="valorH"
+                            step="any"
+                            min="0.000000001"
+                            placeholder="Ej. 0.01"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- MÉTODO DE DERIVACIÓN -->
+                <div class="campo">
+
+                    <label for="metodo">Método de derivación</label>
+
+                    <select id="metodo" required>
+
+                        <option value="adelante">
+                            Diferencia hacia adelante
+                        </option>
+
+                        <option value="atras">
+                            Diferencia hacia atrás
+                        </option>
+
+                        <option value="central">
+                            Diferencia central
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- BOTÓN DE CÁLCULO -->
+                <button type="submit" id="btnCalcular">
+                    ♡ Calcular derivada
+                </button>
+
+            </form>
+
+
+            <!-- MENSAJES -->
+            <p
+                id="mensaje"
+                class="mensaje"
+                role="status"
+                aria-live="polite"
+            ></p>
+
+        </section>
+
+
+        <!-- RESULTADOS -->
+        <section
+            id="resultados"
+            class="card resultados oculto"
+            aria-label="Resultados del cálculo"
+            aria-live="polite"
+        >
+
+            <h2>♡ Resultados del cálculo</h2>
+
+
+            <!-- RESULTADO PRINCIPAL -->
+            <div class="resultado-principal">
+
+                <p>Derivada numérica aproximada</p>
+
+                <h3 id="resultado"></h3>
+
+            </div>
+
+
+            <!-- INFORMACIÓN DEL CÁLCULO -->
+            <div class="datos-grid">
+
+                <div class="dato">
+
+                    <span>Función</span>
+
+                    <strong id="funcionResultado"></strong>
+
+                </div>
+
+
+                <div class="dato">
+
+                    <span>Derivada exacta</span>
+
+                    <strong id="derivadaExacta"></strong>
+
+                </div>
+
+
+                <div class="dato">
+
+                    <span>Valor exacto</span>
+
+                    <strong id="valorExacto"></strong>
+
+                </div>
+
+
+                <div class="dato">
+
+                    <span>Error absoluto</span>
+
+                    <strong id="error"></strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- PROCEDIMIENTO -->
+            <h3>♡ Procedimiento matemático</h3>
+
+            <div
+                class="procedimiento"
+                id="procedimiento"
+            ></div>
+
+
+            <!-- TABLA DE VALORES -->
+            <h3>♡ Tabla de valores</h3>
+
+            <div class="tabla-contenedor">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th scope="col">Valor de x</th>
+                            <th scope="col">f(x)</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="tablaValores"></tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- GRÁFICA -->
+            <h3>♡ Gráfica de la función</h3>
+
+            <div class="grafica-contenedor">
+
+                <canvas
+                    id="grafica"
+                    role="img"
+                    aria-label="Gráfica de la función matemática"
+                ></canvas>
+
+            </div>
+
+        </section>
+
+
+        <!-- HISTORIAL -->
+        <section class="card historial">
+
+            <h2>♡ Historial de cálculos</h2>
+
+            <div
+                id="listaHistorial"
+                aria-live="polite"
+            ></div>
+
+            <button
+                type="button"
+                class="boton-secundario"
+                id="limpiarHistorial"
+            >
+                Limpiar historial
+            </button>
+
+        </section>
+
+
+        <!-- PIE DE PÁGINA -->
+        <footer>
+
+            Hecho con amor por nuestro equipo ♡
+
+        </footer>
+
+    </main>
+
+
+    <!-- LIBRERÍA MATEMÁTICA -->
+    <script src="https://unpkg.com/mathjs@15.2.0/lib/browser/math.js"></script>
+
+
+    <!-- ARCHIVOS JAVASCRIPT DEL PROYECTO -->
+
+    <script src="../static/js/storage.js"></script>
+
+    <script src="../static/js/graficas.js"></script>
+
+    <script src="../static/js/derivadas.js"></script>
+
+    <script src="../static/js/calculos.js"></script>
+
+    <script src="../static/js/app.js"></script>
+
+</body>
+</html>
+    
